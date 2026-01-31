@@ -1,8 +1,6 @@
 #include <Arduino.h>
 #include <Servo.h>
-#include <ros.h>
-#include <std_msgs/UInt8MultiArray.h>
-
+e
 // Define joint limits {min, max} for each servo
 const uint8_t JOINT_LIMITS[][2] = {
   {0,82},   // Joint 0: Claw (limited to prevent over-rotation)
@@ -19,21 +17,18 @@ const uint8_t PRESETS[][5] = {
   // Add new positions here following the same format
 };
 
-// Digital pins connected to servo motors
-const uint8_t SERVO_PINS[] = {
-  7, // Joint 0: Claw
-  6, // Joint 1: Wrist Joint
-  5, // Joint 2: Forearm
-  4, // Joint 3: Arm
-  3  // Joint 4: Pan-Tilt
-};
+// ESP32 Pin for currently active servo (only one motor on D2)
+const uint8_t ACTIVE_SERVO_PIN = 2; // GPIO2 (D2 on ESP32)
+const uint8_t ACTIVE_JOINT = 0;     // Currently controlling Joint 0
 
 // Calculate number of presets at compile time
 constexpr uint8_t NUM_POSITIONS = sizeof(PRESETS)/sizeof(PRESETS[0]);
+constexpr uint8_t NUM_JOINTS = 5;
 
-// Servo control objects and current angle storage
-Servo servos[5]; // Array of servo controllers
-uint8_t current_angles[5] = {90}; // Current angles (start at 90°)
+// Servo control object and current angle storage
+Servo servo;                              // Single servo controller
+uint8_t current_angles[5] = {90};         // Current angles for all 5 joints (start at 90°)
+                                          // Only Joint 0 is physically connected
 
 
 bool at_target(uint8_t targets[5]) {
@@ -45,26 +40,25 @@ bool at_target(uint8_t targets[5]) {
 }
 
 void update_positions(uint8_t targets[5]) {
-  // Process each of the 5 joints
-  for(int i = 0; i < 5; i++) {
-    // Linear Interpolation, move joint closer to target angle by 1 degree per update
-    if(current_angles[i] < targets[i]) {
-      current_angles[i]++;  // Move joint clockwise
-    } 
-    else if(current_angles[i] > targets[i]) {
-      current_angles[i]--;  // Move joint counter-clockwise
-    }
-
-    // Hardware Adjustment for Joint 0 (invert joint 0 if needed)
-    uint8_t servo_angle = current_angles[i];
-    if(i == 0) {
-      // Invert angle (180 - angle) for proper directional control
-      servo_angle = 180 - current_angles[i];
-    }
-    
-    // Update Physical Servo Position, send new angle command to servo motor
-    servos[i].write(servo_angle);
+  // Update only the currently active joint (Joint 0 on D2)
+  
+  // Linear Interpolation, move joint closer to target angle by 1 degree per update
+  if(current_angles[ACTIVE_JOINT] < targets[ACTIVE_JOINT]) {
+    current_angles[ACTIVE_JOINT]++;  // Move joint clockwise
+  } 
+  else if(current_angles[ACTIVE_JOINT] > targets[ACTIVE_JOINT]) {
+    current_angles[ACTIVE_JOINT]--;  // Move joint counter-clockwise
   }
+
+  // Hardware Adjustment for Joint 0 (invert if needed)
+  uint8_t servo_angle = current_angles[ACTIVE_JOINT];
+  if(ACTIVE_JOINT == 0) {
+    // Invert angle (180 - angle) for proper directional control
+    servo_angle = 180 - current_angles[ACTIVE_JOINT];
+  }
+  
+  // Update Physical Servo Position on D2
+  servo.write(servo_angle);
 }
 
 void move_to_position(uint8_t preset_index) {
@@ -85,12 +79,10 @@ void move_to_position(uint8_t preset_index) {
 }
 
 void setup() {
-  // Initialize servo connections
-  for(int i = 0; i < 5; i++) {
-    servos[i].attach(SERVO_PINS[i]); // Connect to PWM pins
-    servos[i].write(90);             // Initialize to neutral position
-  }
-  delay(2000); // Allow servos to reach initial position
+  // Initialize servo connection on D2
+  servo.attach(ACTIVE_SERVO_PIN);  // Connect to GPIO2
+  servo.write(90);                 // Initialize to neutral position
+  delay(2000);                     // Allow servo to reach initial position
 }
 
 void loop() {
