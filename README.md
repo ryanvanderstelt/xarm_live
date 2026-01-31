@@ -6,8 +6,6 @@ pip install -r requirements.txt
 ```
 ```
 cd frontend
-npm create vite@latest .
-# choose React + JavaScript
 npm install
 ```
 
