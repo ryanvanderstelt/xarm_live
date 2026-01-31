@@ -28,6 +28,15 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      {/* Livestream frontend */}
+      <div>
+        <h2>Live Camera Feed</h2>
+        <img
+          src="http://localhost:8000/video_feed"
+          alt="Live Stream"
+          style={{ width: '100%', maxWidth: '800px', borderRadius: '8px' }}
+        />
+      </div>
     </>
   )
 }
