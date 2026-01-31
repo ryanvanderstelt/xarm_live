@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../Arduino/miniARM"
+		},
+		{
+			"name": "miniARM",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
