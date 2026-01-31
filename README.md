@@ -3,8 +3,7 @@ Install:
 ```
 cd backend
 pip install -r requirements.txt
-```
-```
+
 cd frontend
 npm install
 ```
@@ -12,7 +11,7 @@ npm install
 Start backend:
 ```
 cd backend
-python app.py
+uvicorn app:app --reload
 ```
 
 Start frontend:
