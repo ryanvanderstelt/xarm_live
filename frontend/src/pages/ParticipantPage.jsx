@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUp, ArrowDown, ArrowLeft, ArrowRight, ChevronUp, ChevronDown, Lock, Unlock, CheckCircle2, TrendingUp } from 'lucide-react';
+import VideoStream from '../components/VideoStream';
+
+
 
 const GridButton = ({ icon, label, active, locked, onClick, voteCount }) => (
   <button
     onClick={onClick}
     disabled={!!locked}
     className={`relative flex flex-col gap-1 p-4 rounded-2xl font-mono font-bold transition-all border-2 group
-      ${locked 
-        ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-default' 
-        : active 
-          ? 'bg-gradient-to-br from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_30px_rgba(34,211,238,0.6)]' 
+      ${locked
+        ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-default'
+        : active
+          ? 'bg-gradient-to-br from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_30px_rgba(34,211,238,0.6)]'
           : 'bg-zinc-900/80 border-cyan-500/30 text-cyan-300 hover:border-cyan-500 hover:bg-zinc-800/80 hover:scale-105 backdrop-blur-sm'
       }`}
     style={{
@@ -86,16 +89,7 @@ const ParticipantPage = () => {
           <div className="order-2 lg:order-1">
             <div className="relative aspect-video bg-gradient-to-br from-zinc-900 to-black rounded-3xl border-2 border-cyan-500/30 overflow-hidden shadow-2xl group hover:border-cyan-500/50 transition-all">
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
-              <img
-                src="http://localhost:8000/video_feed"
-                alt="Live Feed"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  const errorDiv = e.target.nextElementSibling;
-                  if (errorDiv) errorDiv.style.display = 'flex';
-                }}
-              />
+              <VideoStream />
               <div className="absolute inset-0 flex items-center justify-center text-zinc-600 italic text-xl" style={{ display: 'none' }}>
                 <div className="text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500 mx-auto mb-4"></div>
@@ -142,36 +136,35 @@ const ParticipantPage = () => {
               <h3 className="text-lg font-bold text-cyan-400 mb-4 text-center">DIRECTIONAL CONTROL</h3>
               <div className="grid grid-cols-3 gap-3">
                 <div />
-                <GridButton 
-                  icon={<ArrowUp size={24} />} 
-                  label="+X" 
-                  active={pendingVote === '+X'} 
-                  onClick={() => handleSelect('+X')} 
+                <GridButton
+                  icon={<ArrowUp size={24} />}
+                  label="+X"
+                  active={pendingVote === '+X'}
+                  onClick={() => handleSelect('+X')}
                   locked={lockedVote === '+X'}
                   voteCount={voteCounts['+X']}
                 />
                 <div />
 
-                <GridButton 
-                  icon={<ArrowLeft size={24} />} 
-                  label="-Y" 
-                  active={pendingVote === '-Y'} 
-                  onClick={() => handleSelect('-Y')} 
+                <GridButton
+                  icon={<ArrowLeft size={24} />}
+                  label="-Y"
+                  active={pendingVote === '-Y'}
+                  onClick={() => handleSelect('-Y')}
                   locked={lockedVote === '-Y'}
                   voteCount={voteCounts['-Y']}
                 />
-                
+
                 {/* Z-AXIS COLUMN */}
                 <div className="flex flex-col gap-3">
-                  <button 
+                  <button
                     onClick={() => handleSelect('+Z')}
-                    className={`relative flex-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 p-2 ${
-                      pendingVote === '+Z' 
-                        ? 'bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]' 
-                        : 'bg-zinc-800/50 border-cyan-500/30 text-cyan-300 hover:border-cyan-500 hover:bg-zinc-700/50'
-                    }`}
+                    className={`relative flex-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 p-2 ${pendingVote === '+Z'
+                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
+                      : 'bg-zinc-800/50 border-cyan-500/30 text-cyan-300 hover:border-cyan-500 hover:bg-zinc-700/50'
+                      }`}
                   >
-                    <ChevronUp size={20} /> 
+                    <ChevronUp size={20} />
                     <span className="text-[10px] font-bold">+Z</span>
                     {voteCounts['+Z'] > 0 && (
                       <span className="absolute -top-2 -right-2 bg-indigo-500 text-white text-[10px] font-black px-2 py-1 rounded-full border-2 border-indigo-300">
@@ -179,15 +172,14 @@ const ParticipantPage = () => {
                       </span>
                     )}
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleSelect('-Z')}
-                    className={`relative flex-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 p-2 ${
-                      pendingVote === '-Z' 
-                        ? 'bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]' 
-                        : 'bg-zinc-800/50 border-cyan-500/30 text-cyan-300 hover:border-cyan-500 hover:bg-zinc-700/50'
-                    }`}
+                    className={`relative flex-1 rounded-xl flex flex-col items-center justify-center transition-all border-2 p-2 ${pendingVote === '-Z'
+                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 border-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.5)]'
+                      : 'bg-zinc-800/50 border-cyan-500/30 text-cyan-300 hover:border-cyan-500 hover:bg-zinc-700/50'
+                      }`}
                   >
-                    <ChevronDown size={20} /> 
+                    <ChevronDown size={20} />
                     <span className="text-[10px] font-bold">-Z</span>
                     {voteCounts['-Z'] > 0 && (
                       <span className="absolute -top-2 -right-2 bg-indigo-500 text-white text-[10px] font-black px-2 py-1 rounded-full border-2 border-indigo-300">
@@ -197,21 +189,21 @@ const ParticipantPage = () => {
                   </button>
                 </div>
 
-                <GridButton 
-                  icon={<ArrowRight size={24} />} 
-                  label="+Y" 
-                  active={pendingVote === '+Y'} 
-                  onClick={() => handleSelect('+Y')} 
+                <GridButton
+                  icon={<ArrowRight size={24} />}
+                  label="+Y"
+                  active={pendingVote === '+Y'}
+                  onClick={() => handleSelect('+Y')}
                   locked={lockedVote === '+Y'}
                   voteCount={voteCounts['+Y']}
                 />
-                
+
                 <div />
-                <GridButton 
-                  icon={<ArrowDown size={24} />} 
-                  label="-X" 
-                  active={pendingVote === '-X'} 
-                  onClick={() => handleSelect('-X')} 
+                <GridButton
+                  icon={<ArrowDown size={24} />}
+                  label="-X"
+                  active={pendingVote === '-X'}
+                  onClick={() => handleSelect('-X')}
                   locked={lockedVote === '-X'}
                   voteCount={voteCounts['-X']}
                 />
@@ -220,16 +212,15 @@ const ParticipantPage = () => {
             </div>
 
             {/* LOCK-IN SUBMIT BUTTON */}
-            <button 
+            <button
               onClick={handleLockIn}
               disabled={!pendingVote || !!lockedVote}
-              className={`w-full py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all border-2 ${
-                lockedVote 
-                  ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-not-allowed' 
-                  : pendingVote 
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)]' 
-                    : 'bg-zinc-800/50 border-zinc-700 text-zinc-600 opacity-50'
-              }`}
+              className={`w-full py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all border-2 ${lockedVote
+                ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-not-allowed'
+                : pendingVote
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)]'
+                  : 'bg-zinc-800/50 border-zinc-700 text-zinc-600 opacity-50'
+                }`}
             >
               {lockedVote ? (
                 <>
@@ -245,13 +236,12 @@ const ParticipantPage = () => {
             <div className="grid grid-cols-2 gap-4">
               <button
                 onClick={() => handleSelect('OPEN')}
-                className={`relative flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg border-2 transition-all ${
-                  pendingVote === 'OPEN'
-                    ? 'bg-gradient-to-r from-emerald-500 to-green-600 border-emerald-400 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)] scale-105'
-                    : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-400 hover:bg-emerald-600/30 hover:border-emerald-400'
-                }`}
+                className={`relative flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg border-2 transition-all ${pendingVote === 'OPEN'
+                  ? 'bg-gradient-to-r from-emerald-500 to-green-600 border-emerald-400 text-white shadow-[0_0_30px_rgba(16,185,129,0.5)] scale-105'
+                  : 'bg-emerald-600/20 border-emerald-500/50 text-emerald-400 hover:bg-emerald-600/30 hover:border-emerald-400'
+                  }`}
               >
-                <Unlock size={24} /> 
+                <Unlock size={24} />
                 <span>OPEN</span>
                 {voteCounts['OPEN'] > 0 && (
                   <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-sm font-black px-2 py-1 rounded-full border-2 border-emerald-300">
@@ -261,13 +251,12 @@ const ParticipantPage = () => {
               </button>
               <button
                 onClick={() => handleSelect('CLOSE')}
-                className={`relative flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg border-2 transition-all ${
-                  pendingVote === 'CLOSE'
-                    ? 'bg-gradient-to-r from-rose-500 to-red-600 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.5)] scale-105'
-                    : 'bg-rose-600/20 border-rose-500/50 text-rose-400 hover:bg-rose-600/30 hover:border-rose-400'
-                }`}
+                className={`relative flex items-center justify-center gap-3 p-4 rounded-2xl font-bold text-lg border-2 transition-all ${pendingVote === 'CLOSE'
+                  ? 'bg-gradient-to-r from-rose-500 to-red-600 border-rose-400 text-white shadow-[0_0_30px_rgba(244,63,94,0.5)] scale-105'
+                  : 'bg-rose-600/20 border-rose-500/50 text-rose-400 hover:bg-rose-600/30 hover:border-rose-400'
+                  }`}
               >
-                <Lock size={24} /> 
+                <Lock size={24} />
                 <span>CLOSE</span>
                 {voteCounts['CLOSE'] > 0 && (
                   <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-sm font-black px-2 py-1 rounded-full border-2 border-rose-300">

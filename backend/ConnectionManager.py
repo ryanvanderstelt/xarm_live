@@ -45,7 +45,7 @@ class ConnectionManager:
         """connect event"""
         await websocket.accept()
         self.active_connections.append(websocket)
-        if websocket.url.endswith("viewer"):
+        if str(websocket.url).endswith("viewer"):
             self.viewer_count += 1
         print(websocket.url)
 
@@ -55,14 +55,14 @@ class ConnectionManager:
     
     async def disconnect(self, websocket: WebSocket):
         """disconnect event"""
-        if websocket.url.endswith("viewer"):
+        if str(websocket.url).endswith("viewer"):
             self.viewer_count -= 1
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
     
     async def broadcast_to_viewers(self, data):
         for connection in list(self.active_connections):
-            if connection.url.endswith("robot"):
+            if str(connection.url).endswith("robot"):
                 continue
             try:
                 await connection.send_json(data)
