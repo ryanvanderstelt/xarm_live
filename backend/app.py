@@ -1,12 +1,16 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = Flask(__name__)
-CORS(app)  # allow React to talk to Flask
+app = FastAPI()
 
-@app.route("/api/hello")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/api/hello")
 def hello():
-    return jsonify({"message": "Hello from Python backend!"})
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    return {"message": "Hello from FastAPI backend!"}
