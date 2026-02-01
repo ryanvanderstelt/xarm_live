@@ -17,16 +17,13 @@ class ConnectionManager:
             "gripper_open": 0,
             "gripper_close": 0,
         }
+        self.time_left = 0
         self.viewer_count = 0
-        self.time_left = 10
 
     async def reset_attrib(self):
         for k, v in self.votes.items():
             self.votes[k] = 0
-        self.time_left = 10
-        data = {
-            "time_left": self.time_left
-        }
+        data = {}
         for k, v in self.votes.items():
             data[k] = v
         await self.broadcast_to_viewers(data)
@@ -37,6 +34,7 @@ class ConnectionManager:
             await self.broadcast_to_viewers({attribute: value})
         elif hasattr(self, attribute):
             setattr(self, attribute, value)
+            await self.broadcast_to_viewers({attribute: value})
         else:
             print("No value changed")
             
@@ -46,7 +44,7 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections.append(websocket)
         if str(websocket.url).endswith("viewer"):
-            self.viewer_count += 1
+            await self.change_attrib("viewer_count", self.viewer_count + 1)
         print(websocket.url)
 
     async def send_json(self, data, websocket: WebSocket):
@@ -61,10 +59,13 @@ class ConnectionManager:
             self.active_connections.remove(websocket)
     
     async def broadcast_to_viewers(self, data):
+        # print(f"I am broadcasting {data} now...")
         for connection in list(self.active_connections):
             if str(connection.url).endswith("robot"):
                 continue
             try:
                 await connection.send_json(data)
-            except Exception as e:
-                print("Broadcast failed:", e)
+            except (RuntimeError, Exception) as e:
+                # If the send fails, the socket is likely dead—remove it
+                print(f"Broadcast failed for {connection.url}: {e}")
+                await self.disconnect(connection)

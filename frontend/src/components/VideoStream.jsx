@@ -15,17 +15,15 @@ const VideoStream = () => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1>Live Feed:</h1>
       {frame ? (
         <img
           src={`data:image/jpeg;base64,${frame}`}
           alt="Live Stream"
-          style={{ width: '640px', borderRadius: '8px' }}
+          style={{ width: '900px', borderRadius: '8px' }}
         />
       ) : (
         <p>{isConnected ? 'Waiting for stream...' : 'Connecting to stream...'}</p>
       )}
-      <p>Last Sync: {metadata.time}</p>
     </div>
   );
 };
