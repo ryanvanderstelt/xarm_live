@@ -1,0 +1,16 @@
+void setup() {
+  // Initialize serial communication at the same baud rate as the Python script
+  Serial.begin(9600); 
+}
+
+void loop() {
+  // Check if data is available to read from the serial port
+  if (Serial.available() > 0) {
+    // Read the incoming string until a newline character ('\n') is found
+    String incomingString = Serial.readStringUntil('\n');
+    
+    // Print the received string to the Arduino Serial Monitor
+    Serial.print("Received in Arduino: ");
+    Serial.println(incomingString);
+  }
+}

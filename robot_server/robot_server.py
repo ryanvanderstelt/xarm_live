@@ -3,13 +3,46 @@ import base64
 import asyncio
 import websockets
 import json
+import robotAPI
 
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(4)
 
 def handle_action(data):
     for k, v in data.items():
-        if k != "action":
+        if k != "vote":
             continue
+        match v:
+            case "base_clockwise":
+                robotAPI.turn_clockwise()
+                break
+            case "base_counter_clockwise":
+                robotAPI.turn_counter_clockwise()
+                break
+            case "shoulder_up":
+                robotAPI.shoulder_up()
+                break
+            case "shoulder_down":
+                robotAPI.shoulder_down()
+                break
+            case "elbow_up":
+                robotAPI.elbow_up()
+                break
+            case "elbow_down":
+                robotAPI.elbow_down()
+                break
+            case "wrist_up":
+                robotAPI.wrist_up()
+                break
+            case "wrist_down":
+                robotAPI.wrist_down()
+                break
+            case "claw_open":
+                robotAPI.claw_open()
+                break
+            case "claw_close":
+                robotAPI.claw_close()
+                break
+    
         # This is where we call our handy custom robot API
 
 async def send_frames(websocket):

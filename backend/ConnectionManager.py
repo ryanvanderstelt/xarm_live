@@ -6,16 +6,16 @@ class ConnectionManager:
         """init method, keeping track of connections"""
         self.active_connections = []
         self.votes = {
-            "swivel": 0,
-            "swivel_cc": 0,
-            "elbow_1_open": 0,
-            "elbow_1_close": 0,
-            "elbow_2_open": 0,
-            "elbow_2_close": 0,
-            "elbow_3_open": 0,
-            "elbow_3_close": 0,
-            "gripper_open": 0,
-            "gripper_close": 0,
+            "base_clockwise": 0,
+            "base_counter_clockwise": 0,
+            "shoulder_up": 0,
+            "shoulder_down": 0,
+            "elbow_up": 0,
+            "elbow_down": 0,
+            "wrist_up": 0,
+            "wrist_down": 0,
+            "claw_open": 0,
+            "claw_close": 0,
         }
         self.time_left = 0
         self.viewer_count = 0
