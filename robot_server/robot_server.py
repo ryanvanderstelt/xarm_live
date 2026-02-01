@@ -3,6 +3,7 @@ import base64
 import asyncio
 import websockets
 import json
+import robotAPI
 
 camera = cv2.VideoCapture(0)
 

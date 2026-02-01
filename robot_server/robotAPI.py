@@ -28,7 +28,7 @@ def wrist_up():
     send_string_to_arduino("wu")
 
 def wrist_down():
-    send_string_to_arduino("we")
+    send_string_to_arduino("wd")
 
 def claw_open():
     send_string_to_arduino("co")
