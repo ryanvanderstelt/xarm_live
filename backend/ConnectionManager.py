@@ -54,7 +54,7 @@ class ConnectionManager:
     async def disconnect(self, websocket: WebSocket):
         """disconnect event"""
         if str(websocket.url).endswith("viewer"):
-            self.viewer_count -= 1
+            await self.change_attrib("viewer_count", self.viewer_count - 1)
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
     
@@ -68,4 +68,3 @@ class ConnectionManager:
             except (RuntimeError, Exception) as e:
                 # If the send fails, the socket is likely dead—remove it
                 print(f"Broadcast failed for {connection.url}: {e}")
-                await self.disconnect(connection)

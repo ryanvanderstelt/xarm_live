@@ -51,6 +51,15 @@ const ParticipantPage = () => {
       setViewerCount(data.viewer_count);
     }
 
+    if ('time_left' in data) {
+      setTimer(data.time_left);
+
+      if (data.time_left === 10) {
+        setLockedVote(null);
+        setPendingVote(null);
+      }
+    }
+
     // Update vote counts
     setVoteCounts(prevCounts => {
       const newCounts = { ...prevCounts };
@@ -76,26 +85,11 @@ const ParticipantPage = () => {
     'elbow_3_close': updateVoteCounts,
     'gripper_open': updateVoteCounts,
     'gripper_close': updateVoteCounts,
-    'viewer_count': updateVoteCounts
+    'viewer_count': updateVoteCounts,
+    'time_left': updateVoteCounts
   };
 
   const { ws, isConnected } = useWebSocket(handlers);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev > 0) {
-          return prev - 1;
-        } else {
-          // Timer hit zero - unlock voting but keep vote counts
-          setLockedVote(null);
-          setPendingVote(null);
-          return 10; // Reset timer to 10
-        }
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSelect = (action) => {
     // Allow selecting even if locked - for the next round
@@ -217,10 +211,10 @@ const ParticipantPage = () => {
             onClick={handleLockIn}
             disabled={!pendingVote || !!lockedVote}
             className={`w-full py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all border-2 ${lockedVote
-                ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-not-allowed'
-                : pendingVote
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)]'
-                  : 'bg-zinc-800/50 border-zinc-700 text-zinc-600 opacity-50'
+              ? 'bg-zinc-800/50 border-zinc-700 text-zinc-500 cursor-not-allowed'
+              : pendingVote
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 border-cyan-400 text-white scale-105 shadow-[0_0_40px_rgba(34,211,238,0.6)] hover:shadow-[0_0_60px_rgba(34,211,238,0.8)]'
+                : 'bg-zinc-800/50 border-zinc-700 text-zinc-600 opacity-50'
               }`}
           >
             {lockedVote ? (

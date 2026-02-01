@@ -71,7 +71,6 @@ async def viewer_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
-            print(f"Received from viewer: {data}")
             for k, v in data.items():
                 if k == 'vote' and v in manager.votes:
                     value = getattr(manager, "votes")[v]
