@@ -4,7 +4,7 @@ import time
 
 # --- Configuration ---
 SERIAL_PORT = '/dev/ttyACM1'  # Replace with your Arduino's serial port (e.g., '/dev/ttyACM0' on Linux, 'COM4' on Windows)
-BAUD_RATE = 9600
+BAUD_RATE = 115200
 # ---------------------
 def turn_clockwise():
     send_string_to_arduino("bl")
@@ -46,7 +46,7 @@ def send_string_to_arduino(input):
         print(f"Connected to {SERIAL_PORT} at {BAUD_RATE} baud.")
         
         print("Ready to send data to Arduino. Press Ctrl+C to exit.")
- 
+
         if input:
             data_to_send = (input + '\n').encode('utf-8') 
             ser.write(data_to_send)

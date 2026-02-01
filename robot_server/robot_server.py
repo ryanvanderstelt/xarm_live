@@ -5,63 +5,42 @@ import websockets
 import json
 import robotAPI
 
-camera = cv2.VideoCapture(0)
-
-diff = 15
-
-base = 0
-shoulder = 0
-elbow = 0
-wrist = 0
-claw = 0
+camera = cv2.VideoCapture(4)
 
 def handle_action(data):
     for k, v in data.items():
-        if k != "action":
+        if k != "vote":
             continue
         match v:
-            case "swivel":
-                print(0)
-                base -= diff
-                print(base)
+            case "base_clockwise":
+                robotAPI.turn_clockwise()
                 break
-            case "swivel_cc":
-                print(0)
-                base += diff
-                print(base)
+            case "base_counter_clockwise":
+                robotAPI.turn_counter_clockwise()
                 break
-            case "elbow_1_open":
-                print(0)
-                shoulder -= diff
-                print(shoulder)
+            case "shoulder_up":
+                robotAPI.shoulder_up()
                 break
-            case "elbow_1_close":
-                shoulder += diff
-                print(shoulder)
+            case "shoulder_down":
+                robotAPI.shoulder_down()
                 break
-            case "elbow_2_open":
-                elbow -= diff
-                print(elbow)
+            case "elbow_up":
+                robotAPI.elbow_up()
                 break
-            case "elbow_2_close":
-                elbow += diff
-                print(elbow)
+            case "elbow_down":
+                robotAPI.elbow_down()
                 break
-            case "elbow_3_open":
-                wrist -= diff
-                print(wrist)
+            case "wrist_up":
+                robotAPI.wrist_up()
                 break
-            case "elbow_3_close":
-                wrist += diff
-                print(wrist)
+            case "wrist_down":
+                robotAPI.wrist_down()
                 break
-            case "gripper_open":
-                claw += diff
-                print(claw)
+            case "claw_open":
+                robotAPI.claw_open()
                 break
-            case "gripper_close":
-                claw -= diff
-                print(claw)
+            case "claw_close":
+                robotAPI.claw_close()
                 break
     
         # This is where we call our handy custom robot API

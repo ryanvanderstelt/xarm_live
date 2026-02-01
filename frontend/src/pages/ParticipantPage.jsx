@@ -30,16 +30,16 @@ const ParticipantPage = () => {
   const [lockedVote, setLockedVote] = useState(null);
   const [viewerCount, setViewerCount] = useState(0);
   const [voteCounts, setVoteCounts] = useState({
-    'swivel': 0,
-    'swivel_cc': 0,
-    'elbow_1_open': 0,
-    'elbow_1_close': 0,
-    'elbow_2_open': 0,
-    'elbow_2_close': 0,
-    'elbow_3_open': 0,
-    'elbow_3_close': 0,
-    'gripper_open': 0,
-    'gripper_close': 0
+    'base_clockwise': 0,
+    'base_counter_clockwise': 0,
+    'shoulder_up': 0,
+    'shoulder_down': 0,
+    'elbow_up': 0,
+    'elbow_down': 0,
+    'wrist_up': 0,
+    'wrist_down': 0,
+    'claw_open': 0,
+    'claw_close': 0
   });
 
   // WebSocket handler to update vote counts and viewer count
@@ -75,16 +75,16 @@ const ParticipantPage = () => {
 
   // Set up WebSocket connection with handlers for all vote types
   const handlers = {
-    'swivel': updateVoteCounts,
-    'swivel_cc': updateVoteCounts,
-    'elbow_1_open': updateVoteCounts,
-    'elbow_1_close': updateVoteCounts,
-    'elbow_2_open': updateVoteCounts,
-    'elbow_2_close': updateVoteCounts,
-    'elbow_3_open': updateVoteCounts,
-    'elbow_3_close': updateVoteCounts,
-    'gripper_open': updateVoteCounts,
-    'gripper_close': updateVoteCounts,
+    'base_clockwise': updateVoteCounts,
+    'base_counter_clockwise': updateVoteCounts,
+    'shoulder_up': updateVoteCounts,
+    'shoulder_down': updateVoteCounts,
+    'elbow_up': updateVoteCounts,
+    'elbow_down': updateVoteCounts,
+    'wrist_up': updateVoteCounts,
+    'wrist_down': updateVoteCounts,
+    'claw_open': updateVoteCounts,
+    'claw_close': updateVoteCounts,
     'viewer_count': updateVoteCounts,
     'time_left': updateVoteCounts
   };
@@ -116,8 +116,8 @@ const ParticipantPage = () => {
   };
 
   const actions = [
-    ['swivel', 'elbow_1_open', 'elbow_2_open', 'elbow_3_open', 'gripper_open'],
-    ['swivel_cc', 'elbow_1_close', 'elbow_2_close', 'elbow_3_close', 'gripper_close']
+    ['base_clockwise', 'shoulder_up', 'elbow_up', 'wrist_up', 'claw_open'],
+    ['base_counter_clockwise', 'shoulder_down', 'elbow_down', 'wrist_down', 'claw_close']
   ];
 
   // Flatten actions in order to match button layout
