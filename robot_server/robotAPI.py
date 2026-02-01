@@ -3,7 +3,7 @@ import serial
 import time
 
 # --- Configuration ---
-SERIAL_PORT = '/dev/ttyACM0'  # Replace with your Arduino's serial port (e.g., '/dev/ttyACM0' on Linux, 'COM4' on Windows)
+SERIAL_PORT = '/dev/ttyACM1'  # Replace with your Arduino's serial port (e.g., '/dev/ttyACM0' on Linux, 'COM4' on Windows)
 BAUD_RATE = 9600
 # ---------------------
 def turn_clockwise():
@@ -47,10 +47,10 @@ def send_string_to_arduino(input):
         
         print("Ready to send data to Arduino. Press Ctrl+C to exit.")
  
-        if line:
-            data_to_send = (line + '\n').encode('utf-8') 
+        if input:
+            data_to_send = (input + '\n').encode('utf-8') 
             ser.write(data_to_send)
-            print(f"Sent: {line}")
+            print(f"Sent: {input}")
             
     except serial.SerialException as e:
         print(f"Error opening serial port: {e}")
